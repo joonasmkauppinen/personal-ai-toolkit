@@ -29,6 +29,22 @@ const config = {
       },
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "import/order": [
+      "error",
+      {
+        alphabetize: {
+          order: "asc",
+        },
+        groups: [
+          "type",
+          ["builtin", "external"],
+          "internal",
+          "parent",
+          ["sibling", "index"],
+        ],
+        "newlines-between": "always",
+      },
+    ],
   },
 };
 

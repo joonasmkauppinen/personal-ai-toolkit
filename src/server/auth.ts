@@ -1,13 +1,13 @@
-import { type GetServerSidePropsContext } from "next";
-import {
-  getServerSession,
-  type NextAuthOptions,
-  type DefaultSession,
-} from "next-auth";
-import GitHubProvider from "next-auth/providers/github";
+import type { GetServerSidePropsContext } from "next";
+import type { NextAuthOptions, DefaultSession } from "next-auth";
+
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { getServerSession } from "next-auth";
+import GitHubProvider from "next-auth/providers/github";
+
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import { isValidAdminUser } from "~/utils/parseAdminUsers";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     signIn(params) {
       // Allow sign in only if the user is the admin.
-      if (params.user.email === env.ADMIN_EMAIL) {
+      if (isValidAdminUser(params.user, env.ADMIN_EMAILS)) {
         return true;
       } else {
         return false;
